@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "";
+}
+@model ConfigurationModel
+@using Nop.Plugin.Payments.EPay.Models;
+@using Nop.Web.Framework;
+@using (Html.BeginForm())
+{
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.MerchantId):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MerchantId)
+                @Html.ValidationMessageFor(model => model.MerchantId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Fullscreen):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Fullscreen)
+                @Html.ValidationMessageFor(model => model.Fullscreen)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Group):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Group)
+                @Html.ValidationMessageFor(model => model.Group)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.MD5Secret):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MD5Secret)
+                @Html.ValidationMessageFor(model => model.MD5Secret)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AuthMail):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AuthMail)
+                @Html.ValidationMessageFor(model => model.AuthMail)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Instantcapture):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Instantcapture)
+                @Html.ValidationMessageFor(model => model.Instantcapture)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Ownreceipt):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Ownreceipt)
+                @Html.ValidationMessageFor(model => model.Ownreceipt)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UseRemoteInterface):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UseRemoteInterface)
+                @Html.ValidationMessageFor(model => model.UseRemoteInterface)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.RemotePassword):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.RemotePassword)
+                @Html.ValidationMessageFor(model => model.RemotePassword)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" width="100%">
+                <button type="submit" name="save" value="save" class="t-button">
+                    Save</button>
+            </td>
+        </tr>
+    </table>
+    
+}

@@ -1,0 +1,8 @@
+﻿Group: Payment methods
+FriendlyName: ePay Payment Solutions
+SystemName: Payments.EPay
+Version: 1.4
+SupportedVersions: 3.20
+Author: ePay - Michael Korsgaard
+DisplayOrder: 1
+FileName: Nop.Plugin.Payments.EPay.dll

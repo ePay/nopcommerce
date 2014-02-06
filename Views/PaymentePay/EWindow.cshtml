@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "~/Views/Shared/_ColumnsThree.cshtml";
+}
+@model Nop.Plugin.Payments.EPay.Models.EWindowModel
+@using Nop.Web.Framework;
+
+<script type="text/javascript" src="https://relay.ditonlinebetalingssystem.dk/integration/PaymentLogos/PaymentLogos.aspx?merchantnumber=@Model.MerchantNumber&padding=5&rows=2&direction=2"></script>
+
+<script type="text/javascript" src="https://ssl.ditonlinebetalingssystem.dk/integration/ewindow/paymentwindow.js" charset="UTF-8">
+</script>
+
+<script type="text/javascript">
+    paymentwindow = new PaymentWindow({
+        'merchantnumber': "@Model.MerchantNumber",
+        'orderid': "@Model.OrderId",
+        'amount': "@Model.Amount",
+        'windowstate': "@Model.WindowState",
+        'language': "@Model.Language",
+        'currency': "@Model.Currency",
+        'accepturl': "@Model.AcceptUrl",
+        'callbackurl': "@Model.CallbackUrl",
+        'cancelurl': "@Model.DeclineUrl",
+        'mailreceipt': "@Model.AuthMail",
+        'group': "@Model.Group",
+        'instantcapture': "@Model.InstantCapture",
+        'ownreceipt': "@Model.OwnReceipt",
+        'cms': "@Model.Cms",
+        'hash': "@Model.Md5Check"
+    });
+    paymentwindow.open();
+</script>
+ 
+<input type="button" onclick="javascript: paymentwindow.open()" value="Go to payment" />
