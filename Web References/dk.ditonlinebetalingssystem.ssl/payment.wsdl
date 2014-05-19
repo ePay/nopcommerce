@@ -201,6 +201,7 @@
           <s:enumeration value="PAYMENT_RENEW" />
           <s:enumeration value="PAYMENT_EUROLINE_WAIT_CAPTURE" />
           <s:enumeration value="PAYMENT_EUROLINE_WAIT_CREDIT" />
+          <s:enumeration value="PARTLY_TRANSACTION_HIDDEN" />
         </s:restriction>
       </s:simpleType>
       <s:complexType name="ArrayOfTransactionHistoryInfo">
@@ -239,6 +240,25 @@
           <s:enumeration value="KLARNA" />
           <s:enumeration value="SVEA" />
           <s:enumeration value="HANDELSBANKEN" />
+          <s:enumeration value="SEB_DIREKT" />
+          <s:enumeration value="NORDEA_SE_DIREKT" />
+          <s:enumeration value="HANDELSBANKEN_DIREKT" />
+          <s:enumeration value="SWEDBANK_DIREKT" />
+          <s:enumeration value="IBILL" />
+          <s:enumeration value="NEMPAY" />
+          <s:enumeration value="IDEAL" />
+          <s:enumeration value="OBETUR" />
+          <s:enumeration value="EVRY_NORDEA_SE" />
+          <s:enumeration value="EVRY_NORDEA_DK" />
+          <s:enumeration value="EVRY_NORDEA_NO" />
+          <s:enumeration value="EVRY_NORDEA_FI" />
+          <s:enumeration value="MERCHANT4T" />
+          <s:enumeration value="EVRY_HANDELSBANKEN" />
+          <s:enumeration value="EVRY_EVALON" />
+          <s:enumeration value="EVRY_SWEDBANK" />
+          <s:enumeration value="EVRY_EUROLINE" />
+          <s:enumeration value="EVRY_TELLER" />
+          <s:enumeration value="VALITOR" />
           <s:enumeration value="EPAY" />
         </s:restriction>
       </s:simpleType>
@@ -327,6 +347,13 @@
           <s:enumeration value="MOBILPENGE" />
           <s:enumeration value="KLARNA" />
           <s:enumeration value="SVEA" />
+          <s:enumeration value="SEB_DIREKTBETALNINGAR" />
+          <s:enumeration value="NORDEA_SE_DIREKTBETALNING" />
+          <s:enumeration value="HANDELSBANKEN_SE_DIREKTBETALNINGAR" />
+          <s:enumeration value="SWEDBANK_DIREKTBETALNINGAR" />
+          <s:enumeration value="IBILL" />
+          <s:enumeration value="NEMPAY" />
+          <s:enumeration value="IDEAL" />
         </s:restriction>
       </s:simpleType>
       <s:element name="getcardinfoResponse">

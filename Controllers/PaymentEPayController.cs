@@ -15,7 +15,7 @@ using System.Collections.Specialized;
 
 namespace Nop.Plugin.Payments.EPay.Controllers
 {
-    public class PaymentEPayController : BaseNopPaymentController
+    public class PaymentEPayController : BasePaymentController
     {
         private readonly ISettingService settingService;
         private readonly IPaymentService paymentService;
