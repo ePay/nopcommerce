@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="https://ssl.ditonlinebetalingssystem.dk/remote/subscription.asmx?wsdl" filename="subscription.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="https://ssl.ditonlinebetalingssystem.dk/remote/subscription.asmx?disco" filename="subscription.disco" />
+  </Results>
+</DiscoveryClientResultsFile>

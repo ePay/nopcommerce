@@ -13,6 +13,7 @@ using Nop.Services.Payments;
 using System.Threading;
 using System.Collections.Generic;
 using Nop.Web.Framework;
+using Nop.Services.Orders;
 
 namespace Nop.Plugin.Payments.EPay
 {
@@ -26,17 +27,23 @@ namespace Nop.Plugin.Payments.EPay
         private readonly EPayPaymentSettings ePayPaymentSettings;
         private readonly ISettingService settingService;
         private readonly IWebHelper webHelper;
+		private readonly IOrderService orderService;
         
         #endregion
         
         #region Ctor
         
-        public EPayPaymentProcessor(EPayPaymentSettings ePayPaymentSettings,
-            ISettingService settingService, IWebHelper webHelper)
+        public EPayPaymentProcessor(
+				EPayPaymentSettings ePayPaymentSettings,
+				ISettingService settingService, 
+				IWebHelper webHelper,
+				IOrderService orderService
+		)
         {
             this.ePayPaymentSettings = ePayPaymentSettings;
             this.settingService = settingService;
             this.webHelper = webHelper;
+			this.orderService = orderService;
         }
         
         #endregion
@@ -102,7 +109,13 @@ namespace Nop.Plugin.Payments.EPay
             string continueurl = itemurl + "Plugins/PaymentePay/PDTHandler"; 
             string cancelurl = itemurl + "Plugins/PaymentePay/CancelOrder";
             string merchant = ePayPaymentSettings.MerchantId;
-            
+
+			var orderHasRecurringItems = false;
+			foreach ( var item in postProcessPaymentRequest.Order.OrderItems )
+			{
+				orderHasRecurringItems = orderHasRecurringItems || (item.Product != null && item.Product.IsRecurring);
+			}
+
             string ordernumber = postProcessPaymentRequest.Order.Id.ToString("D2");
             // ordernumber 1-9 must be with 0 in front, e.g. 01
             if (ordernumber.Length == 1)
@@ -137,6 +150,8 @@ namespace Nop.Plugin.Payments.EPay
             
             remotePostHelper.Add("cms", "nopcommerce");
             
+			remotePostHelper.Add("subscription", (orderHasRecurringItems) ? "1" : "0");
+
             string stringToMd5 = "";
             foreach (string key in remotePostHelper.Params)
             {
@@ -301,7 +316,79 @@ namespace Nop.Plugin.Payments.EPay
         public ProcessPaymentResult ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest)
         {
             var result = new ProcessPaymentResult();
-            result.AddError("Recurring payment not supported");
+			if ( !processPaymentRequest.IsRecurringPayment )
+			{
+				// This payment method doesn't actually handle scheduling recurring payments
+				// Therefore the initial call to ProcessRecurringPayment - where it actually
+				// ISN'T a recurring payment - is ignored.
+
+				return result;
+			}
+
+			var order = orderService.GetOrderById(processPaymentRequest.InitialOrderId);
+
+			if ( order != null ) // this needs an initial order to work (this is where subscriptionid is registered)
+			{
+				int fraud = 0;
+				long transactionid = -1;
+				int pbsresponse = -1;
+				int epayresponse = -1;
+
+				int merchant = Int32.Parse(ePayPaymentSettings.MerchantId);
+
+				// Construct order identification for this recurring payment
+				// This is done because the new order that will hold this payment is not fully constructed yet
+				// thus no orderId is available
+				var orderId = String.Format("{0}-rec-{1}", processPaymentRequest.InitialOrderId, DateTime.UtcNow.ToString("yyMMddHHmm"));
+
+				// authorize subscription payment
+				// instant capture!
+				using ( var subscriptionservice = new epay.subscriptionservice.Subscription())
+				{
+					subscriptionservice.authorize(
+							merchant, // merchantid
+							Int32.Parse(order.SubscriptionTransactionId), // subscriptionid
+							orderId, // orderid
+							Convert.ToInt32(Math.Round(processPaymentRequest.OrderTotal, 2) * 100), // amount
+							Int32.Parse(EPayHelper.GetIsoCode(order.CustomerCurrencyCode)), // currency
+							1, // instantcapture
+							"", // group
+							"", // description
+							"", // email
+							"", // sms
+							"", // ipaddress
+							ePayPaymentSettings.RemotePassword, // pwd
+							ref fraud,
+							ref transactionid,
+							ref pbsresponse,
+							ref epayresponse);
+
+					if ( epayresponse == -1 && pbsresponse == 0 )
+					{
+						result.SubscriptionTransactionId = order.SubscriptionTransactionId;
+						result.AuthorizationTransactionId = transactionid.ToString();
+						result.CaptureTransactionId = transactionid.ToString();
+						result.CaptureTransactionResult = String.Format("Captured: ({0})", transactionid);
+						result.NewPaymentStatus = PaymentStatus.Paid;
+					}
+					else
+					{
+						var epayresp = -1;
+						var pbsresponsetext = "";
+						var epayresponsetext = "";
+
+						subscriptionservice.getPbsError(merchant, 2, pbsresponse, ePayPaymentSettings.RemotePassword, ref pbsresponsetext, ref epayresp);
+						subscriptionservice.getEpayError(merchant, 2, epayresponse, ePayPaymentSettings.RemotePassword, ref epayresponsetext, ref epayresp);
+ 
+						result.AddError(String.Format("Error processing recurring payment: PBS({0}) EPay({1})", pbsresponsetext, epayresponsetext));
+					}
+				}
+			}
+			else
+			{
+				result.AddError("Initial order wasn't set for recurring payment.");
+			}
+
             return result;
         }
         
@@ -313,7 +400,30 @@ namespace Nop.Plugin.Payments.EPay
         public CancelRecurringPaymentResult CancelRecurringPayment(CancelRecurringPaymentRequest cancelPaymentRequest)
         {
             var result = new CancelRecurringPaymentResult();
-            result.AddError("Recurring payment not supported");
+
+			using ( var subscriptionservice = new epay.subscriptionservice.Subscription() )
+			{
+				var merchant = Int32.Parse(ePayPaymentSettings.MerchantId);
+
+				int epayresponse = -1;
+				subscriptionservice.deletesubscription(merchant, Int32.Parse(cancelPaymentRequest.Order.SubscriptionTransactionId), ePayPaymentSettings.RemotePassword, ref epayresponse);
+
+				if ( epayresponse == -1 )
+				{
+					// ok
+					// "empty" result is sufficient
+				}
+				else
+				{
+					var epayresp = -1;
+					var epayresponsetext = "";
+
+					subscriptionservice.getEpayError(merchant, 2, epayresponse, ePayPaymentSettings.RemotePassword, ref epayresponsetext, ref epayresp);
+
+					result.AddError(String.Format("Cancel recurring failed, code {0} - {1}", epayresponse, epayresponsetext));
+				}
+			}
+
             return result;
         }
         
@@ -453,7 +563,7 @@ namespace Nop.Plugin.Payments.EPay
         {
             get
             {
-                return RecurringPaymentType.NotSupported;
+				return RecurringPaymentType.Manual;
             }
         }
         

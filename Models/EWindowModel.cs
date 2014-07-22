@@ -34,6 +34,8 @@ namespace Nop.Plugin.Payments.EPay.Models
 
         public string Cms { get; set; }
 
+		public string Subscription { get; set; }
+
         public string Md5Check { get; set; }
     }
 }

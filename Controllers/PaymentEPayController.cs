@@ -141,7 +141,8 @@ namespace Nop.Plugin.Payments.EPay.Controllers
             model.OrderId = form["orderid"];
             model.OwnReceipt = form["ownreceipt"];
             model.WindowState = form["windowstate"];
-            model.Md5Check = form["md5key"];
+			model.Subscription = form["subscription"];
+			model.Md5Check = form["md5key"];
             
             return View("Nop.Plugin.Payments.ePay.Views.PaymentePay.EWindow", model);
         }
@@ -153,6 +154,9 @@ namespace Nop.Plugin.Payments.EPay.Controllers
             string transactionOrderId = webHelper.QueryString<string>("orderid");
             string transactionTxnId = webHelper.QueryString<string>("txnid");
             string transactionHash = webHelper.QueryString<string>("hash");
+
+            string subscriptionId = webHelper.QueryString<string>("subscriptionid"); // is null if no subscription
+			string maskedCCNo = webHelper.QueryString<string>("cardno");
 
             // Check if ePay module is alive
             var processor = paymentService.LoadPaymentMethodBySystemName("Payments.EPay") as EPayPaymentProcessor;
@@ -201,6 +205,16 @@ namespace Nop.Plugin.Payments.EPay.Controllers
 
                 if (validated)
                 {
+					if ( subscriptionId != null )
+					{
+						order.SubscriptionTransactionId = subscriptionId;
+					}
+
+					if (maskedCCNo != null)
+					{
+						order.MaskedCreditCardNumber = maskedCCNo;
+					}
+
                     if (ePayPaymentSettings.Instantcapture)
                     {
                         if (orderProcessingService.CanMarkOrderAsPaid(order))

@@ -1,9 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Nop.Plugin.Payments.ePay.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Nop.Plugin.Payments.EPay.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="Nop_Plugin_Payments_ePay_dk_ditonlinebetalingssystem_ssl_Payment" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://ssl.ditonlinebetalingssystem.dk/remote/payment.asmx</Value>
+    </Setting>
+    <Setting Name="Nop_Plugin_Payments_EPay_epay_subscriptionservice_Subscription" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://ssl.ditonlinebetalingssystem.dk/remote/subscription.asmx</Value>
     </Setting>
   </Settings>
 </SettingsFile>

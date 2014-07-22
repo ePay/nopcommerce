@@ -144,6 +144,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\epay.subscriptionservice\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\PaymentePay\Configure.cshtml" />
@@ -160,6 +165,14 @@
     </Content>
     <Content Include="Views\Web.config" />
     <None Include="packages.config" />
+    <None Include="Web References\epay.subscriptionservice\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\epay.subscriptionservice\subscription.disco" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -180,6 +193,11 @@
     <None Include="Web References\dk.ditonlinebetalingssystem.ssl\TransactionInformationType1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\epay.subscriptionservice\subscription.wsdl" />
+    <None Include="Web References\epay.subscriptionservice\SubscriptionInformationType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +217,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>Nop_Plugin_Payments_ePay_dk_ditonlinebetalingssystem_ssl_Payment</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://ssl.ditonlinebetalingssystem.dk/remote/subscription.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\epay.subscriptionservice\</RelPath>
+      <UpdateFromURL>https://ssl.ditonlinebetalingssystem.dk/remote/subscription.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Nop_Plugin_Payments_EPay_epay_subscriptionservice_Subscription</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
