@@ -563,7 +563,10 @@ namespace Nop.Plugin.Payments.EPay
         {
             get
             {
-				return RecurringPaymentType.Manual;
+                if (ePayPaymentSettings.UseRemoteInterface)
+                    return RecurringPaymentType.Manual;
+                else
+                    return Services.Payments.RecurringPaymentType.NotSupported;
             }
         }
         
